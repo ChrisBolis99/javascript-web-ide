@@ -2,11 +2,11 @@ import { Component, input } from '@angular/core';
 import { ConsoleEntry } from '../../models/ide.models';
 
 @Component({
-  imports: [],
   selector: 'app-console-panel',
-  styleUrl: './console-panel.sass',
   templateUrl: './console-panel.html',
+  styleUrl: './console-panel.sass'
 })
 export class ConsolePanel {
   readonly entries = input<ConsoleEntry[]>([]);
+  readonly plainTextMode = input<boolean>(false);
 }

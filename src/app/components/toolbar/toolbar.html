@@ -1,8 +1,11 @@
-<header class="toolbar">
+<header class="toolbar" [class.plain-text]="plainTextMode()">
   <button type="button" (click)="runClicked.emit()">Run</button>
   <button type="button" (click)="clearClicked.emit()">Clear</button>
   <button type="button" (click)="themeToggled.emit()">
     Theme: {{ isDark() ? 'Dark' : 'Light' }}
+  </button>
+  <button type="button" (click)="plainTextToggled.emit()">
+    Colors: {{ plainTextMode() ? 'Off (Plain Text)' : 'On' }}
   </button>
   <span class="status">
     Errors: {{ errorCount() }}

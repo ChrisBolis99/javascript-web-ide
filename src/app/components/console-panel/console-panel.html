@@ -1,4 +1,4 @@
-<section class="console-panel" aria-label="Console Output">
+<section class="console-panel" [class.plain-text]="plainTextMode()" aria-label="Console Output">
   <div class="console-header">Console</div>
   <div class="console-entries">
     @for (entry of entries(); track entry.id) {
