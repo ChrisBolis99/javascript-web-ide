@@ -1,0 +1,45 @@
+:host
+  display: block
+  height: 100%
+
+.console-panel
+  display: flex
+  flex-direction: column
+  height: 100%
+  border-left: 1px solid #2d3545
+  background: #0f1218
+
+.console-header
+  padding: 0.5rem 0.75rem
+  font-size: 0.8rem
+  font-weight: 600
+  text-transform: uppercase
+  letter-spacing: 0.04em
+  border-bottom: 1px solid #232a37
+  color: #8b949e
+
+.console-entries
+  padding: 0.6rem 0.75rem
+  overflow-y: auto
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace
+  font-size: 0.85rem
+
+.log-line
+  display: flex
+  gap: 0.6rem
+  padding: 0.2rem 0
+  white-space: pre-wrap
+  word-break: break-word
+
+  .time
+    color: #6e7681
+    flex-shrink: 0
+
+  &.log .msg
+    color: #e6edf3
+
+  &.warn .msg
+    color: #d29922
+
+  &.error .msg
+    color: #f85149
