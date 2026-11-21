@@ -21,7 +21,7 @@ export class App {
 
   private nextLogId = 1;
 
-  protected readonly starterCode = `// Welcome to your JS Web IDE
+  protected readonly starterCode = `// JS Web IDE
 function greet(name) {
   return "Hello, " + name + "!";
 }
