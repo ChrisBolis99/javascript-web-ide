@@ -52,6 +52,7 @@ console.log("2 + 2 =", 2 + 2);
   private executeInSandbox(code: string): void {
     const iframe = document.createElement('iframe');
     iframe.sandbox.add('allow-scripts');
+    iframe.sandbox.add('allow-modals');
     iframe.style.display = 'none';
 
     const cleanup = () => {
@@ -83,7 +84,9 @@ console.log("2 + 2 =", 2 + 2);
               level,
               args: args.map(a => {
                 try {
-                  return typeof a === 'object' && a !== null ? JSON.stringify(a, null, 2) : String(a);
+                  return typeof a === 'object' && a !== null
+                    ? JSON.stringify(a, null, 2)
+                    : String(a);
                 } catch {
                   return String(a);
                 }
@@ -96,15 +99,22 @@ console.log("2 + 2 =", 2 + 2);
           console.error = (...args) => send('error', args);
 
           window.onerror = (msg, _url, line) => {
-            send('error', [line ? 'Line ' + line + ': ' + msg : String(msg)]);
+            send('error', [
+              line ? 'Line ' + line + ': ' + msg : String(msg)
+            ]);
           };
 
           try {
             ${code}
           } catch (err) {
-            send('error', [err && err.stack ? err.stack : String(err)]);
+            send('error', [
+              err && err.stack ? err.stack : String(err)
+            ]);
           } finally {
-            parent.postMessage({ source: 'js-ide-sandbox', type: 'done' }, '*');
+            parent.postMessage({
+              source: 'js-ide-sandbox',
+              type: 'done'
+            }, '*');
           }
         })();
       <\/script>
