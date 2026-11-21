@@ -16,22 +16,27 @@ export class App {
 
   protected readonly title = signal('javascript-web-ide');
   protected readonly isDark = signal(true);
+  protected readonly plainTextMode = signal(false);
   protected readonly errorCount = signal(0);
   protected readonly logs = signal<ConsoleEntry[]>([]);
 
   private nextLogId = 1;
 
-  protected readonly starterCode = `// JS Web IDE
+  protected readonly starterCode = `// JavaScript Web IDE
 function greet(name) {
   return "Hello, " + name + "!";
 }
 
-console.log(greet("Christopher"));
+console.log(greet("Alice"));
 console.log("2 + 2 =", 2 + 2);
 `;
 
   protected toggleTheme(): void {
     this.isDark.update((v) => !v);
+  }
+
+  protected togglePlainText(): void {
+    this.plainTextMode.update((v) => !v);
   }
 
   protected clearConsole(): void {

@@ -1,10 +1,12 @@
-<div class="ide-shell">
+<div class="ide-shell" [class.plain-text]="plainTextMode()">
   <app-toolbar
     [isDark]="isDark()"
+    [plainTextMode]="plainTextMode()"
     [errorCount]="errorCount()"
     (runClicked)="runCode()"
     (clearClicked)="clearConsole()"
     (themeToggled)="toggleTheme()"
+    (plainTextToggled)="togglePlainText()"
   />
 
   <main class="workspace">
@@ -12,10 +14,14 @@
       #editor
       [initialCode]="starterCode"
       [isDark]="isDark()"
+      [plainTextMode]="plainTextMode()"
       (errorCountChange)="errorCount.set($event)"
     />
 
-    <app-console-panel [entries]="logs()" />
+    <app-console-panel
+      [entries]="logs()"
+      [plainTextMode]="plainTextMode()"
+    />
   </main>
 </div>
 

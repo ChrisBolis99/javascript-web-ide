@@ -1,21 +1,30 @@
-import { AfterViewInit, Component, effect, ElementRef, input, OnDestroy, output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  effect,
+  ElementRef,
+  input,
+  OnDestroy,
+  output,
+  ViewChild
+} from '@angular/core';
 
 declare const require: {
   config: (cfg: { paths: Record<string, string> }) => void;
   (deps: string[], callback: (...args: any[]) => void): void;
-}
+};
 
 @Component({
-  imports: [],
   selector: 'app-code-editor',
-  styleUrl: './code-editor.sass',
   templateUrl: './code-editor.html',
+  styleUrl: './code-editor.sass'
 })
 export class CodeEditor implements AfterViewInit, OnDestroy {
   @ViewChild('editorHost') editorHost!: ElementRef<HTMLDivElement>;
 
   readonly initialCode = input<string>('');
   readonly isDark = input<boolean>(true);
+  readonly plainTextMode = input<boolean>(false);
   readonly errorCountChange = output<number>();
 
   private monacoRef: any;
@@ -27,6 +36,15 @@ export class CodeEditor implements AfterViewInit, OnDestroy {
       const dark = this.isDark();
       if (this.monacoRef) {
         this.monacoRef.editor.setTheme(dark ? 'vs-dark' : 'vs');
+      }
+    });
+
+    effect(() => {
+      const plain = this.plainTextMode();
+      const model = this.editorInstance?.getModel();
+      if (this.monacoRef && model) {
+        this.monacoRef.editor.setModelLanguage(model, plain ? 'plaintext' : 'javascript');
+        this.emitErrorCount(model);
       }
     });
   }
@@ -59,7 +77,7 @@ export class CodeEditor implements AfterViewInit, OnDestroy {
       this.monacoRef = monaco;
       this.editorInstance = monaco.editor.create(this.editorHost.nativeElement, {
         value: this.initialCode(),
-        language: 'javascript',
+        language: this.plainTextMode() ? 'plaintext' : 'javascript',
         theme: this.isDark() ? 'vs-dark' : 'vs',
         automaticLayout: true,
         minimap: { enabled: false },
