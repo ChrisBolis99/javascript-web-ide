@@ -8,7 +8,7 @@ function greet(name) {
 
 console.log(greet("Alice"));
 console.log("2 + 2 =", 2 + 2);
-`;toggleTheme(){this.isDark.update(t=>!t)}togglePlainText(){this.plainTextMode.update(t=>!t)}clearConsole(){this.logs.set([])}runCode(){let t=this.editorComponent?.getValue()??"";this.appendLog("log","--- Running script ---"),this.executeInSandbox(t)}executeInSandbox(t){let n=document.createElement("iframe");n.sandbox.add("allow-scripts"),n.style.display="none";let r=()=>{window.removeEventListener("message",o),n.remove()},o=s=>{if(s.source!==n.contentWindow)return;let a=s.data;!a||a.source!=="js-ide-sandbox"||(a.type==="console"?this.appendLog(a.level,a.args.join(" ")):a.type==="done"&&r())};window.addEventListener("message",o);let i=`
+`;toggleTheme(){this.isDark.update(t=>!t)}togglePlainText(){this.plainTextMode.update(t=>!t)}clearConsole(){this.logs.set([])}runCode(){let t=this.editorComponent?.getValue()??"";this.appendLog("log","--- Running script ---"),this.executeInSandbox(t)}executeInSandbox(t){let n=document.createElement("iframe");n.sandbox.add("allow-scripts"),n.sandbox.add("allow-modals"),n.style.display="none";let r=()=>{window.removeEventListener("message",o),n.remove()},o=s=>{if(s.source!==n.contentWindow)return;let a=s.data;!a||a.source!=="js-ide-sandbox"||(a.type==="console"?this.appendLog(a.level,a.args.join(" ")):a.type==="done"&&r())};window.addEventListener("message",o);let i=`
       <script>
         (function() {
           const send = (level, args) => {
@@ -18,7 +18,9 @@ console.log("2 + 2 =", 2 + 2);
               level,
               args: args.map(a => {
                 try {
-                  return typeof a === 'object' && a !== null ? JSON.stringify(a, null, 2) : String(a);
+                  return typeof a === 'object' && a !== null
+                    ? JSON.stringify(a, null, 2)
+                    : String(a);
                 } catch {
                   return String(a);
                 }
@@ -31,15 +33,22 @@ console.log("2 + 2 =", 2 + 2);
           console.error = (...args) => send('error', args);
 
           window.onerror = (msg, _url, line) => {
-            send('error', [line ? 'Line ' + line + ': ' + msg : String(msg)]);
+            send('error', [
+              line ? 'Line ' + line + ': ' + msg : String(msg)
+            ]);
           };
 
           try {
             ${t}
           } catch (err) {
-            send('error', [err && err.stack ? err.stack : String(err)]);
+            send('error', [
+              err && err.stack ? err.stack : String(err)
+            ]);
           } finally {
-            parent.postMessage({ source: 'js-ide-sandbox', type: 'done' }, '*');
+            parent.postMessage({
+              source: 'js-ide-sandbox',
+              type: 'done'
+            }, '*');
           }
         })();
       <\/script>
