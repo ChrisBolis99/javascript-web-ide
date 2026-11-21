@@ -1,0 +1,11 @@
+<section class="console-panel" aria-label="Console Output">
+  <div class="console-header">Console</div>
+  <div class="console-entries">
+    @for (entry of entries(); track entry.id) {
+      <div class="log-line" [class]="entry.level">
+        <span class="time">{{ entry.time }}</span>
+        <span class="msg">{{ entry.message }}</span>
+      </div>
+    }
+  </div>
+</section>
