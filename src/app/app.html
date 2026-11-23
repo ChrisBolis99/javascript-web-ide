@@ -18,6 +18,11 @@
       (errorCountChange)="errorCount.set($event)"
     />
 
+    <div class="preview-panel">
+      <div class="preview-header">Output</div>
+      <div id="sandbox-output"></div>
+    </div>
+
     <app-console-panel
       [entries]="logs()"
       [plainTextMode]="plainTextMode()"
